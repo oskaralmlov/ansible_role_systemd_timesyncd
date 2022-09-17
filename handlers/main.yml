@@ -1,0 +1,6 @@
+---
+- name: restart {{ __systemd_timesyncd_service }}
+  ansible.builtin.systemd:
+    name: "{{ __systemd_timesyncd_service }}"
+    state: restarted
+

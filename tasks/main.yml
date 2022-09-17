@@ -1,0 +1,29 @@
+---
+- tags: systemd_timesyncd
+  become: true
+  block:
+
+    - name: Install systemd-timesyncd
+      ansible.builtin.package:
+        name: systemd-timesyncd
+        state: present
+
+    - name: Generate {{ _systemd_timesyncd_config }}
+      ansible.builtin.copy:
+        content: |
+          NTP={{ systemd_timesyncd_servers | join(' ') }}
+          FallbackNTP={{ systemd_timesyncd_servers_fallback | join(' ') }}
+        dest: "{{ _systemd_timesyncd_config }}"
+        mode: 0644
+        owner: root
+        group: root
+      vars:
+        _systemd_timesyncd_config: /etc/systemd/timesyncd.conf
+      notify: restart {{ __systemd_timesyncd_service }}
+
+
+    - name: Start & enable {{ __systemd_timesyncd_service }}
+      ansible.builtin.systemd:
+        name: "{{ __systemd_timesyncd_service }}"
+        state: started
+        enabled: true

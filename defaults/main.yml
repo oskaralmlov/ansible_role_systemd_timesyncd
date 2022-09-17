@@ -1,0 +1,9 @@
+---
+# A list[str] of hostnames/IP of the NTP servers to query.
+systemd_timesyncd_servers: []
+
+# A list[str] of hostnames/IP to use when no other are configured.
+systemd_timesyncd_servers_fallback:
+  - time.apple.com
+  - time.google.com
+  - time.cloudflare.com
